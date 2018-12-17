@@ -19,10 +19,8 @@ public class SonyProjectorConfiguration {
      * The host name (IP Address) of the SONY projector
      */
     public String host;
-
     public Integer port;
-
-    // public String community;
+    public String community;
 
     public String getHost() {
         return host;
@@ -38,5 +36,13 @@ public class SonyProjectorConfiguration {
 
     public void settPort(Integer port) {
         this.port = port;
+    }
+
+    public String getCommunity() {
+        return community;
+    }
+
+    public void setCommunity(String community) {
+        this.community = community;
     }
 }

@@ -22,16 +22,13 @@ public class SonyProjectorBindingConstants {
 
     private static final String BINDING_ID = "sonyprojector";
 
-    // list of parameters
-    // public static final String PARAMETER_ADDRESS = "host or ip address";
-    // public static final String PARAMETER_PORT = "53484";
-    // public static final String PARAMETER_COMMUNITY = "SONY";
-
     // List of all Thing Type UIDs
     public static final ThingTypeUID THING_TYPE_SONYPROJECTOR = new ThingTypeUID(BINDING_ID, "sonyprojector");
 
     // List of all Channel ids
-    // public static final String CHANNEL_1 = "channel1";
     public static final String CHANNEL_POWER = "power";
+    public static final String CHANNEL_POWER2 = "power2";
+    public static final String CHANNEL_POWERSTATE = "powerstate";
+    public static final String CHANNEL_CALIBRATIONPRESET = "calibrationpreset";
 
 }

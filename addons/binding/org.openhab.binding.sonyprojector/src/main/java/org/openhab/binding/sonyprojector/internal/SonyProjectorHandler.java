@@ -8,15 +8,17 @@
  */
 package org.openhab.binding.sonyprojector.internal;
 
-import static org.openhab.binding.sonyprojector.internal.SonyProjectorBindingConstants.CHANNEL_POWER;
+import static org.openhab.binding.sonyprojector.internal.SonyProjectorBindingConstants.*;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.types.Command;
+import org.eclipse.smarthome.core.types.RefreshType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,14 +49,26 @@ public class SonyProjectorHandler extends BaseThingHandler {
             return;
         }
 
-        // if (command instanceof RefreshType) {
-        // return;
-        // }
-
         try {
             if (CHANNEL_POWER.equals(channelUID.getId())) {
-                connector.setPower(command);
+                if (command instanceof RefreshType) {
+                    ;
+                    updateState(channelUID, connector.getPower());
+                } else {
+                    connector.setPower(command);
+                }
+            } else if (CHANNEL_POWERSTATE.equals(channelUID.getId())) {
+                if (command instanceof RefreshType) {
+                    updateState(channelUID, new StringType(connector.getCalibrationPreset()));
+                }
+            } else if (CHANNEL_CALIBRATIONPRESET.equals(channelUID.getId())) {
+                if (command instanceof RefreshType) {
+                    updateState(channelUID, new StringType(connector.getCalibrationPreset()));
+                } else {
+                    connector.setCalibrationPreset(command);
+                }
             }
+
         } catch (Exception e) {
             logger.debug(e.getMessage());
         }
@@ -82,7 +96,7 @@ public class SonyProjectorHandler extends BaseThingHandler {
         // In case you can not decide the thing status directly (e.g. for long running connection handshake using WAN
         // access or similar) you should set status UNKNOWN here and then decide the real status asynchronously in the
         // background.
-        connector = new SonyProjectorConnector(config.host, config.port);
+        connector = new SonyProjectorConnector(config.host, config.port, config.community);
 
         // set the thing status to UNKNOWN temporarily and let the background task decide for the real status.
         // the framework is then able to reuse the resources from the thing handler initialization.
@@ -92,6 +106,14 @@ public class SonyProjectorHandler extends BaseThingHandler {
         // Example for background initialization:
         scheduler.execute(() -> {
             boolean thingReachable = true; // <background task with long running initialization here>
+
+            // thing is online, if we are able to read the port state
+            try {
+                connector.getPower();
+            } catch (SonyProjectorConnectorException e) {
+                thingReachable = false;
+            }
+
             // when done do:
             if (thingReachable) {
                 updateStatus(ThingStatus.ONLINE);
