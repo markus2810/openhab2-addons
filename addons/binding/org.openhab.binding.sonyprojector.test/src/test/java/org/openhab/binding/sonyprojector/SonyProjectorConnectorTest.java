@@ -15,14 +15,19 @@ public class SonyProjectorConnectorTest extends JavaTest {
 
     private static SonyProjectorConnector spc = new SonyProjectorConnector(host, port, community);
 
-    @Test
-    public void setPowerOn() throws Exception {
-        spc.setPower(OnOffType.ON);
-    }
+    // @Test
+    // public void setPowerOn() throws Exception {
+    // spc.setPower(OnOffType.ON);
+    // }
 
     @Test
     public void setPowerOff() throws Exception {
         spc.setPower(OnOffType.OFF);
+    }
+
+    @Test
+    public void getPower() throws Exception {
+        OnOffType power = spc.getPower();
     }
 
     @Test

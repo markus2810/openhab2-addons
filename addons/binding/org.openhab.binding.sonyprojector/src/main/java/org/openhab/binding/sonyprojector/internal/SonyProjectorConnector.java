@@ -3,7 +3,6 @@ package org.openhab.binding.sonyprojector.internal;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
-import java.util.Arrays;
 
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.types.Command;
@@ -20,7 +19,7 @@ public class SonyProjectorConnector {
     private final Logger logger = LoggerFactory.getLogger(SonyProjectorHandler.class);
 
     private String Address;
-    private int Port;
+    private int Port = 53484;
     private String Community = "SONY";
 
     private final String Header = new String(new byte[] { 0x02, 0x0A });
@@ -56,13 +55,16 @@ public class SonyProjectorConnector {
         return SonyProjectorCalibrationPreset.getFromByteData(data);
     }
 
-    public OnOffType getPower() throws SonyProjectorConnectorException {
-        byte[] data = getSetting(SonyProjectorCommand.Power);
-        if (Arrays.equals(data, new byte[] { 0x00, 0x01 })) {
-            return OnOffType.ON;
-        }
-        return OnOffType.OFF;
-    }
+    /*
+     * public OnOffType getPower() throws SonyProjectorConnectorException {
+     * byte[] data = getSetting(SonyProjectorCommand.StatusPower);
+     * if (Arrays.equals(data, new byte[] { 0x00, 0x01 })) {
+     * return OnOffType.ON;
+     * }
+     * return OnOffType.OFF;
+     * 
+     * }
+     */
 
     public byte[] getSetting(String cmd) throws SonyProjectorConnectorException {
         logger.debug("Sony Projectore getSetting: " + cmd);

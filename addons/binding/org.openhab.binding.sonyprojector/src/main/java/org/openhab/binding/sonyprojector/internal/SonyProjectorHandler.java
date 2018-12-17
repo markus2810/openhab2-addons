@@ -52,8 +52,7 @@ public class SonyProjectorHandler extends BaseThingHandler {
         try {
             if (CHANNEL_POWER.equals(channelUID.getId())) {
                 if (command instanceof RefreshType) {
-                    ;
-                    updateState(channelUID, connector.getPower());
+                    // updateState(channelUID, connector.getPower());
                 } else {
                     connector.setPower(command);
                 }
@@ -108,11 +107,13 @@ public class SonyProjectorHandler extends BaseThingHandler {
             boolean thingReachable = true; // <background task with long running initialization here>
 
             // thing is online, if we are able to read the port state
-            try {
-                connector.getPower();
-            } catch (SonyProjectorConnectorException e) {
-                thingReachable = false;
-            }
+            /*
+             * try {
+             * /connector.getPower();
+             * } catch (SonyProjectorConnectorException e) {
+             * thingReachable = false;
+             * }
+             */
 
             // when done do:
             if (thingReachable) {
