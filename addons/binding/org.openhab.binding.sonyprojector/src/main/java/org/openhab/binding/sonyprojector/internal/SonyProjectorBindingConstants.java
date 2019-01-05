@@ -23,11 +23,10 @@ public class SonyProjectorBindingConstants {
     private static final String BINDING_ID = "sonyprojector";
 
     // List of all Thing Type UIDs
-    public static final ThingTypeUID THING_TYPE_SONYPROJECTOR = new ThingTypeUID(BINDING_ID, "sonyprojector");
+    public static final ThingTypeUID THING_TYPE_ETHERNET = new ThingTypeUID(BINDING_ID, "ethernetconnection");
 
     // List of all Channel ids
     public static final String CHANNEL_POWER = "power";
-    public static final String CHANNEL_POWER2 = "power2";
     public static final String CHANNEL_POWERSTATE = "powerstate";
     public static final String CHANNEL_CALIBRATIONPRESET = "calibrationpreset";
 

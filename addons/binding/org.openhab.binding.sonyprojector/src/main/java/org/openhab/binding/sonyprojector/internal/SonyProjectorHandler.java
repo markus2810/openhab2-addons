@@ -34,10 +34,7 @@ public class SonyProjectorHandler extends BaseThingHandler {
     private final Logger logger = LoggerFactory.getLogger(SonyProjectorHandler.class);
 
     @Nullable
-    private SonyProjectorConfiguration config;
-
-    @Nullable
-    private SonyProjectorConnector connector;
+    private SonyProjectorSdcpConnector connector;
 
     public SonyProjectorHandler(Thing thing) {
         super(thing);
@@ -85,8 +82,8 @@ public class SonyProjectorHandler extends BaseThingHandler {
 
     @Override
     public void initialize() {
-        logger.debug("Start initializing!");
-        config = getConfigAs(SonyProjectorConfiguration.class);
+        logger.debug("Start initializing handler for thing {}", getThing().getUID());
+        SonyProjectorConfiguration config = getConfigAs(SonyProjectorConfiguration.class);
 
         // TODO: Initialize the handler.
         // The framework requires you to return from this method quickly. Also, before leaving this method a thing
@@ -95,7 +92,7 @@ public class SonyProjectorHandler extends BaseThingHandler {
         // In case you can not decide the thing status directly (e.g. for long running connection handshake using WAN
         // access or similar) you should set status UNKNOWN here and then decide the real status asynchronously in the
         // background.
-        connector = new SonyProjectorConnector(config.host, config.port, config.community);
+        connector = new SonyProjectorSdcpConnector(config.host, config.port, config.community);
 
         // set the thing status to UNKNOWN temporarily and let the background task decide for the real status.
         // the framework is then able to reuse the resources from the thing handler initialization.
