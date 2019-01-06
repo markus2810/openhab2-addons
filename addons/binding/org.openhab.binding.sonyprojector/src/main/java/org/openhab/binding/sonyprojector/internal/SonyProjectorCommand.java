@@ -16,8 +16,8 @@ package org.openhab.binding.sonyprojector.internal;
  */
 public enum SonyProjectorCommand {
 
-    // Not available for VW40, VW50, VW60, VW70, VW85, VW95ES, VW100, VW1000ES, VW1100ES,
-    // HW15, HW20, HW20A, HW30ES, HW30AES, HW35ES, HW40ES, HW50ES, HW55ES, HW58ES
+    // Not available for VW40, VW50, VW60, VW70, VW85, VW95, VW100, VW1000ES, VW1100ES,
+    // HW15, HW20, HW30ES, HW35ES, HW40ES, HW50ES, HW55ES, HW58ES
     POWER("Power", new byte[] { 0x01, 0x30 }),
 
     INPUT("Input", new byte[] { 0x00, 0x01 }),
@@ -46,26 +46,26 @@ public enum SonyProjectorCommand {
     PICTURE_MUTING("Picture Muting", new byte[] { 0x00, 0x30 }),
 
     // Not available for VW40, VW50, VW60, VW70, VW100
-    // HW15, HW20, HW20A
+    // HW15, HW20
     MOTION_ENHANCER("Motion Enhancer", new byte[] { 0x00, 0x59 }),
 
     // Not available for VW40, VW50, VW60, VW100
     XVCOLOR("xvColor", new byte[] { 0x00, 0x5A }),
 
     // Not available for VW40, VW50, VW60, VW70, VW85, VW100
-    // HW15, HW20, HW20A, HW30ES, HW30AES, HW35ES, HW40ES, HW50ES, HW55ES, HW58ES, HW60, HW65, HW68
+    // HW15, HW20, HW30ES, HW35ES, HW40ES, HW50ES, HW55ES, HW58ES, HW60, HW65, HW68
     PICTURE_POSITION("Picture Position", new byte[] { 0x00, 0x66 }),
 
-    // Not available for VW40, VW50, VW60, VW70, VW85, VW95ES, VW100
-    // HW15, HW20, HW20A, HW30ES, HW30AES
+    // Not available for VW40, VW50, VW60, VW70, VW85, VW95, VW100
+    // HW15, HW20, HW30ES
     REALITY_CREATION("Reality Creation", new byte[] { 0x00, 0x67 }),
 
-    // Not available for VW40, VW50, VW60, VW70, VW85, VW95ES, VW100, VW315, VW320, VW328, VW365, VW1000ES, VW1100ES
-    // HW15, HW20, HW20A, HW30ES, HW30AES, HW35ES, HW40ES, HW50ES, HW55ES, HW58ES, HW60, HW65, HW68
+    // Not available for VW40, VW50, VW60, VW70, VW85, VW95, VW100, VW315, VW320, VW328, VW365, VW1000ES, VW1100ES
+    // HW15, HW20, HW30ES, HW35ES, HW40ES, HW50ES, HW55ES, HW58ES, HW60, HW65, HW68
     HDR("HDR", new byte[] { 0x00, 0x7C }),
 
-    // Not available for VW40, VW50, VW60, VW70, VW85, VW95ES, VW100, VW1000ES, VW1100ES
-    // HW15, HW20, HW20A, HW30ES, HW30AES, HW35ES, HW40ES, HW50ES, HW55ES, HW58ES
+    // Not available for VW40, VW50, VW60, VW70, VW85, VW95, VW100, VW1000ES, VW1100ES
+    // HW15, HW20, HW30ES, HW35ES, HW40ES, HW50ES, HW55ES, HW58ES
     INPUT_LAG_REDUCTION("Input Lag Reduction", new byte[] { 0x00, (byte) 0x99 }),
 
     STATUS_ERROR("Status Error", new byte[] { 0x01, 0x01 }),

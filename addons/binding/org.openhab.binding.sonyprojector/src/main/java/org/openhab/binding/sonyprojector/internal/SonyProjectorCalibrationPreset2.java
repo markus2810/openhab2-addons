@@ -14,7 +14,7 @@ import org.eclipse.smarthome.core.util.HexUtils;
 
 /**
  * Represents the different kinds of calibration preset (picture mode)
- * for projector models VW40, VW50, VW60, VW70, VW100, HW15, HW20, HW20A
+ * for projector models VW40, VW50, VW60, VW70, VW100, HW15, HW20
  *
  * @author Laurent Garnier - Initial contribution
  */

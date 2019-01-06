@@ -14,7 +14,7 @@ import org.eclipse.smarthome.core.util.HexUtils;
 
 /**
  * Represents the different kinds of calibration preset (picture mode)
- * for projector models VW95ES, HW30ES, HW30AES
+ * for projector models VW95, HW30ES
  *
  * @author Laurent Garnier - Initial contribution
  */

@@ -28,6 +28,12 @@ public abstract class SonyProjectorConnector {
     private static final byte[] POWER_ON = new byte[] { 0x00, 0x01 };
     private static final byte[] POWER_OFF = new byte[] { 0x00, 0x00 };
 
+    private SonyProjectorModel model;
+
+    public SonyProjectorConnector(SonyProjectorModel model) {
+        this.model = model;
+    }
+
     public int getLampHours() throws SonyProjectorConnectorException {
         byte[] bytes = getSetting(SonyProjectorCommand.LAMP_TIMER);
         int val = ((bytes[0] & 0xff) << 8) | (bytes[1] & 0xff);
@@ -35,24 +41,27 @@ public abstract class SonyProjectorConnector {
     }
 
     public void setCalibrationPreset(Command cmd) throws SonyProjectorConnectorException {
-        byte[] presetData = SonyProjectorCalibrationPreset.getFromName(cmd.toString()).getDataCode();
-        setSetting(SonyProjectorCommand.CALIBRATION_PRESET, presetData);
+        setSetting(SonyProjectorCommand.CALIBRATION_PRESET, model.getCalibrPresetDataCodeFromName(cmd.toString()));
     }
 
     public String getCalibrationPreset() throws SonyProjectorConnectorException {
-        return SonyProjectorCalibrationPreset.getFromDataCode(getSetting(SonyProjectorCommand.CALIBRATION_PRESET))
-                .getName();
+        return model.getCalibrPresetNameFromDataCode(getSetting(SonyProjectorCommand.CALIBRATION_PRESET));
     }
 
     public void setPower(Command cmd) throws SonyProjectorConnectorException {
         logger.debug("setting sony projector power");
+
+        if (!model.isPowerCmdAvailable()) {
+            logger.debug("setPower: command unavailable for projector mode {}", model.getName());
+            return;
+        }
 
         if (cmd == OnOffType.ON) {
             setSetting(SonyProjectorCommand.POWER, POWER_ON);
         } else if (cmd == OnOffType.OFF) {
             setSetting(SonyProjectorCommand.POWER, POWER_OFF);
         } else {
-            logger.debug("setPower invalid cmd");
+            logger.debug("setPower: invalid command {}", cmd.toString());
             return;
         }
     }

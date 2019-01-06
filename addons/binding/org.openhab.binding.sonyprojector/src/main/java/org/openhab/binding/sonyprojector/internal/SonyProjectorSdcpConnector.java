@@ -38,7 +38,9 @@ public class SonyProjectorSdcpConnector extends SonyProjectorConnector {
     private int port;
     private String community;
 
-    public SonyProjectorSdcpConnector(String address, Integer port, String community) {
+    public SonyProjectorSdcpConnector(String address, Integer port, String community, SonyProjectorModel model) {
+        super(model);
+
         this.address = address;
 
         // init port

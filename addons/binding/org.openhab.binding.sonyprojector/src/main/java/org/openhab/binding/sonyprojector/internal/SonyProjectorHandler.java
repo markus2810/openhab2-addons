@@ -33,6 +33,8 @@ public class SonyProjectorHandler extends BaseThingHandler {
 
     private final Logger logger = LoggerFactory.getLogger(SonyProjectorHandler.class);
 
+    private static final SonyProjectorModel DEFAULT_MODEL = SonyProjectorModel.VW520;
+
     @Nullable
     private SonyProjectorSdcpConnector connector;
 
@@ -92,16 +94,15 @@ public class SonyProjectorHandler extends BaseThingHandler {
         // In case you can not decide the thing status directly (e.g. for long running connection handshake using WAN
         // access or similar) you should set status UNKNOWN here and then decide the real status asynchronously in the
         // background.
-        connector = new SonyProjectorSdcpConnector(config.host, config.port, config.community);
+        connector = new SonyProjectorSdcpConnector(config.host, config.port, config.community, DEFAULT_MODEL);
 
         // set the thing status to UNKNOWN temporarily and let the background task decide for the real status.
         // the framework is then able to reuse the resources from the thing handler initialization.
         // we set this upfront to reliably check status updates in unit tests.
         updateStatus(ThingStatus.UNKNOWN);
 
-        // Example for background initialization:
         scheduler.execute(() -> {
-            boolean thingReachable = true; // <background task with long running initialization here>
+            boolean thingReachable = true;
 
             // thing is online, if we are able to read the port state
 
@@ -111,7 +112,6 @@ public class SonyProjectorHandler extends BaseThingHandler {
                 thingReachable = false;
             }
 
-            // when done do:
             if (thingReachable) {
                 updateStatus(ThingStatus.ONLINE);
             } else {
