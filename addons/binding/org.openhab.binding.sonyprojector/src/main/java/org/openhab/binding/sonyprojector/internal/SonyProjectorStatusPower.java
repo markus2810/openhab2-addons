@@ -21,6 +21,9 @@ public class SonyProjectorStatusPower {
     public static final byte[] PowerOn = new byte[] { 0x00, 0x03 };
     public static final byte[] Cooling1 = new byte[] { 0x00, 0x04 };
     public static final byte[] Cooling2 = new byte[] { 0x00, 0x05 };
+    public static final byte[] SavingCooling1 = new byte[] { 0x00, 0x06 };
+    public static final byte[] SavingCooling2 = new byte[] { 0x00, 0x07 };
+    public static final byte[] SavingStandby = new byte[] { 0x00, 0x08 };
 
     public static String getFromByteData(byte[] status) throws SonyProjectorConnectorException {
         if (Arrays.equals(status, Standby)) {
@@ -35,6 +38,12 @@ public class SonyProjectorStatusPower {
             return "Cooling1";
         } else if (Arrays.equals(status, Cooling2)) {
             return "Cooling2";
+        } else if (Arrays.equals(status, SavingCooling1)) {
+            return "Saving Cooling1";
+        } else if (Arrays.equals(status, SavingCooling2)) {
+            return "Saving Cooling2";
+        } else if (Arrays.equals(status, SavingStandby)) {
+            return "Saving Standby";
         }
         throw new SonyProjectorConnectorException("Invalid calibration preset data: " + Integer.toHexString(status[1]));
     }
