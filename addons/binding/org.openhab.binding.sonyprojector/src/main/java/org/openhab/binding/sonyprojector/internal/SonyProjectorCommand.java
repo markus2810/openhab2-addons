@@ -9,34 +9,86 @@
 package org.openhab.binding.sonyprojector.internal;
 
 /**
+ * Represents the different kinds of commands
+ *
  * @author Markus Wehrle - Initial contribution
+ * @author Laurent Garnier - Transform into an enum
  */
-public class SonyProjectorCommand {
+public enum SonyProjectorCommand {
 
-    public static final String Power = new String(new byte[] { 0x01, 0x30 });
-    public static final String CalibrationPreset = new String(new byte[] { 0x00, 0x02 });
-    public static final String Contrast = new String(new byte[] { 0x00, 0x10 });
-    public static final String Brightness = new String(new byte[] { 0x00, 0x11 });
-    public static final String Color = new String(new byte[] { 0x00, 0x12 });
-    public static final String Hue = new String(new byte[] { 0x00, 0x13 });
-    public static final String Sharpness = new String(new byte[] { 0x00, 0x14 });
-    public static final String ColorTemperature = new String(new byte[] { 0x00, 0x17 });
-    public static final String LampControl = new String(new byte[] { 0x00, 0x1A });
-    public static final String ContrastEnhancer = new String(new byte[] { 0x00, 0x1C });
-    public static final String AdvancedIris = new String(new byte[] { 0x00, 0x1D });
-    public static final String FilmMode = new String(new byte[] { 0x00, 0x1F });
-    public static final String ColorSpace = new String(new byte[] { 0x00, 0x3B });
-    public static final String MotionFlow = new String(new byte[] { 0x00, 0x59 });
-    public static final String xvColor = new String(new byte[] { 0x00, 0x5A });
-    public static final String RealityCreation = new String(new byte[] { 0x00, 0x67 });
-    public static final String HDR = new String(new byte[] { 0x00, 0x7C });
-    public static final String InputLagReduction = new String(new byte[] { 0x00, (byte) 0x99 });
-    public static final String PicturePosition = new String(new byte[] { 0x00, 0x30 });
-    public static final String Aspect = new String(new byte[] { 0x00, 0x20 });
-    public static final String Input = new String(new byte[] { 0x00, 0x01 });
-    public static final String StatusError = new String(new byte[] { 0x01, 0x01 });
-    public static final String StatusPower = new String(new byte[] { 0x01, 0x02 });
-    public static final String LampTimer = new String(new byte[] { 0x01, 0x13 });
-    public static final String StatusError2 = new String(new byte[] { 0x01, 0x25 });
+    // Not available for VW40, VW50, VW60, VW70, VW85, VW95ES, VW100, VW1000ES, VW1100ES,
+    // HW15, HW20, HW20A, HW30ES, HW30AES, HW35ES, HW40ES, HW50ES, HW55ES, HW58ES
+    POWER("Power", new byte[] { 0x01, 0x30 }),
+
+    INPUT("Input", new byte[] { 0x00, 0x01 }),
+    CALIBRATION_PRESET("Picture Mode", new byte[] { 0x00, 0x02 }),
+    CONTRAST("Contrast", new byte[] { 0x00, 0x10 }),
+    BRIGHTNESS("Brigtness", new byte[] { 0x00, 0x11 }),
+    COLOR("Color", new byte[] { 0x00, 0x12 }),
+    HUE("Hue", new byte[] { 0x00, 0x13 }),
+    SHARPNESS("Sharpness", new byte[] { 0x00, 0x14 }),
+    COLOR_TEMP("Color Temperature", new byte[] { 0x00, 0x17 }),
+    LAMP_CONTROL("Lamp Control", new byte[] { 0x00, 0x1A }),
+    CONTRAST_ENHANCER("Contrast Enhancer", new byte[] { 0x00, 0x1C }),
+
+    // Not available for VW315, VW320, VW328, VW365
+    ADVANCED_IRIS("Advanced Iris", new byte[] { 0x00, 0x1D }),
+
+    // Not available for VW315, VW320, VW328, VW365, VW515, VW520, VW528, VW665
+    // HW60, HW65, HW68
+    REAL_COLOR("Real Color Processing", new byte[] { 0x00, 0x1E }),
+
+    // Not available for VW40, VW50, VW60
+    FILM_MODE("Film Mode", new byte[] { 0x00, 0x1F }),
+
+    WIDE_MODE("Wide Mode", new byte[] { 0x00, 0x20 }),
+    COLOR_SPACE("Color Space", new byte[] { 0x00, 0x3B }),
+    PICTURE_MUTING("Picture Muting", new byte[] { 0x00, 0x30 }),
+
+    // Not available for VW40, VW50, VW60, VW70, VW100
+    // HW15, HW20, HW20A
+    MOTION_ENHANCER("Motion Enhancer", new byte[] { 0x00, 0x59 }),
+
+    // Not available for VW40, VW50, VW60, VW100
+    XVCOLOR("xvColor", new byte[] { 0x00, 0x5A }),
+
+    // Not available for VW40, VW50, VW60, VW70, VW85, VW100
+    // HW15, HW20, HW20A, HW30ES, HW30AES, HW35ES, HW40ES, HW50ES, HW55ES, HW58ES, HW60, HW65, HW68
+    PICTURE_POSITION("Picture Position", new byte[] { 0x00, 0x66 }),
+
+    // Not available for VW40, VW50, VW60, VW70, VW85, VW95ES, VW100
+    // HW15, HW20, HW20A, HW30ES, HW30AES
+    REALITY_CREATION("Reality Creation", new byte[] { 0x00, 0x67 }),
+
+    // Not available for VW40, VW50, VW60, VW70, VW85, VW95ES, VW100, VW315, VW320, VW328, VW365, VW1000ES, VW1100ES
+    // HW15, HW20, HW20A, HW30ES, HW30AES, HW35ES, HW40ES, HW50ES, HW55ES, HW58ES, HW60, HW65, HW68
+    HDR("HDR", new byte[] { 0x00, 0x7C }),
+
+    // Not available for VW40, VW50, VW60, VW70, VW85, VW95ES, VW100, VW1000ES, VW1100ES
+    // HW15, HW20, HW20A, HW30ES, HW30AES, HW35ES, HW40ES, HW50ES, HW55ES, HW58ES
+    INPUT_LAG_REDUCTION("Input Lag Reduction", new byte[] { 0x00, (byte) 0x99 }),
+
+    STATUS_ERROR("Status Error", new byte[] { 0x01, 0x01 }),
+    STATUS_POWER("Status Power", new byte[] { 0x01, 0x02 }),
+    LAMP_TIMER("Lamp Timer", new byte[] { 0x01, 0x13 }),
+
+    // Not available for VW40, VW50, VW60, VW70, VW100
+    STATUS_ERROR2("Status Error 2", new byte[] { 0x01, 0x25 });
+
+    private String name;
+    private byte[] commandCode;
+
+    private SonyProjectorCommand(String name, byte[] commandCode) {
+        this.name = name;
+        this.commandCode = commandCode;
+    }
+
+    public byte[] getCommandCode() {
+        return commandCode;
+    }
+
+    public String getName() {
+        return name;
+    }
 
 }

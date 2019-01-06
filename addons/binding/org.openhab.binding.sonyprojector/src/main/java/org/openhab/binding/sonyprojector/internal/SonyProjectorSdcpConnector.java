@@ -12,6 +12,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 
+import org.eclipse.smarthome.core.util.HexUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
  * using Pj Talk service (SDCP protocol)
  *
  * @author Markus Wehrle - Initial contribution
+ * @author Laurent Garnier - Use byte[] rather than String for binary messages
  */
 public class SonyProjectorSdcpConnector extends SonyProjectorConnector {
 
@@ -27,6 +29,10 @@ public class SonyProjectorSdcpConnector extends SonyProjectorConnector {
 
     private static final int DEFAULT_PORT = 53484;
     private static final String DEFAULT_COMMUNITY = "SONY";
+
+    private static final byte[] HEADER = new byte[] { 0x02, 0x0A };
+    private static final byte[] SET = new byte[] { 0x00 };
+    private static final byte[] GET = new byte[] { 0x01 };
 
     private String address;
     private int port;
@@ -51,30 +57,59 @@ public class SonyProjectorSdcpConnector extends SonyProjectorConnector {
     }
 
     @Override
-    protected byte[] getSetting(String cmd) throws SonyProjectorConnectorException {
-        logger.debug("Sony Projector SDCP getSetting: {}", cmd);
+    protected byte[] getSetting(SonyProjectorCommand command) throws SonyProjectorConnectorException {
+        logger.debug("Sony Projector SDCP getSetting: {}", command.getName());
 
-        String dataLength = new String(new byte[] { (byte) 0 });
-        String message = SonyProjectorData.Header + community + SonyProjectorRequestType.Get + cmd + dataLength;
-        byte[] result = sendCommand(message);
+        byte[] cmd = command.getCommandCode();
+        byte[] dataLength = new byte[] { (byte) 0 };
+        byte[] message = new byte[HEADER.length + community.length() + GET.length + cmd.length + dataLength.length];
+        int len = 0;
+        System.arraycopy(HEADER, 0, message, len, HEADER.length);
+        len += HEADER.length;
+        System.arraycopy(community.getBytes(), 0, message, len, community.length());
+        len += community.length();
+        System.arraycopy(GET, 0, message, len, GET.length);
+        len += GET.length;
+        System.arraycopy(cmd, 0, message, len, cmd.length);
+        len += cmd.length;
+        System.arraycopy(dataLength, 0, message, len, dataLength.length);
 
-        logger.debug("Sony Projector SDCP getSetting result: {}", result);
+        byte[] result = getResponseData(sendCommand(message));
 
-        return getResponseData(result);
+        logger.debug("Sony Projector SDCP getSetting result data: {}", HexUtils.bytesToHex(result));
+
+        return result;
     }
 
     @Override
-    protected void setSetting(String cmd, String data) throws SonyProjectorConnectorException {
-        logger.debug("Sony Projector SDCP setSetting: {}, data: {}", cmd, data);
+    protected void setSetting(SonyProjectorCommand command, byte[] data) throws SonyProjectorConnectorException {
+        logger.debug("Sony Projector SDCP setSetting: {}, data: {}", command.getName(), HexUtils.bytesToHex(data));
 
-        String dataLength = new String(new byte[] { (byte) data.length() });
-        String message = SonyProjectorData.Header + community + SonyProjectorRequestType.Set + cmd + dataLength + data;
+        byte[] cmd = command.getCommandCode();
+        byte[] dataLength = new byte[] { (byte) data.length };
+        byte[] message = new byte[HEADER.length + community.length() + SET.length + cmd.length + dataLength.length
+                + data.length];
+        int len = 0;
+        System.arraycopy(HEADER, 0, message, len, HEADER.length);
+        len += HEADER.length;
+        System.arraycopy(community.getBytes(), 0, message, len, community.length());
+        len += community.length();
+        System.arraycopy(SET, 0, message, len, SET.length);
+        len += SET.length;
+        System.arraycopy(cmd, 0, message, len, cmd.length);
+        len += cmd.length;
+        System.arraycopy(dataLength, 0, message, len, dataLength.length);
+        len += dataLength.length;
+        System.arraycopy(data, 0, message, len, data.length);
+
         sendCommand(message);
 
         logger.debug("Sony Projector SDCP setSetting successful");
     }
 
-    private byte[] sendCommand(String message) throws SonyProjectorConnectorException {
+    private byte[] sendCommand(byte[] message) throws SonyProjectorConnectorException {
+        logger.debug("Sony Projector SDCP sendCommand: {}", HexUtils.bytesToHex(message));
+
         // SDCP always reads 12 bytes
         byte[] receivedMessage = new byte[12];
 
@@ -86,11 +121,11 @@ public class SonyProjectorSdcpConnector extends SonyProjectorConnector {
             DataInputStream dataIn = new DataInputStream(clientSocket.getInputStream());
 
             // send request in bytes
-            dataOut.write(message.getBytes());
+            dataOut.write(message);
 
             int count = dataIn.read(receivedMessage);
             if (count != 12) {
-                logger.debug("Sony Projector SDCP - unexpected data length received in response");
+                logger.debug("Sony Projector SDCP - unexpected data length received in response: {]", count);
             }
 
             // close the socket
@@ -104,6 +139,8 @@ public class SonyProjectorSdcpConnector extends SonyProjectorConnector {
     }
 
     private void validateReceivedMessage(byte[] message) throws SonyProjectorConnectorException {
+        logger.debug("Sony Projector SDCP validateReceivedMessage: {}", HexUtils.bytesToHex(message));
+
         // header should be a sony projector header
         // TODO
 

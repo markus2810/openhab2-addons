@@ -51,15 +51,22 @@
 		<description>Get and set the calibration preset</description>
 		<state>
 			<options>
-				<option value="Film1">Film1</option>
-				<option value="Film2">Film2</option>
-				<option value="REF">REF</option>
+				<option value="Film1">Cinema Film 1</option>
+				<option value="Film2">Cinema Film 2</option>
+				<option value="Digital">Cinema Digital</option>
+				<option value="Reference">Reference</option>
 				<option value="TV">TVL</option>
 				<option value="Photo">Photo</option>
 				<option value="Game">Game</option>
-				<option value="BRTCINE">BRTCINE</option>
-				<option value="BRTTV">BRTTV</option>
+				<option value="BRTCINE">BRT Film</option>
+				<option value="BRTTV">BRT TV</option>
+				<option value="Dynamic">Dynamic</option>
+				<option value="Standard">Standard</option>
+				<option value="Cinema">Cinema</option>
 				<option value="User">User</option>
+				<option value="User1">User 1</option>
+				<option value="User2">User 2</option>
+				<option value="User3">User 3</option>
 			</options>
 		</state>
 	</channel-type>

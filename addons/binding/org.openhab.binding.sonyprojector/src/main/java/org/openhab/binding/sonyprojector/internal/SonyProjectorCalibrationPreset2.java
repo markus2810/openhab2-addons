@@ -14,28 +14,23 @@ import org.eclipse.smarthome.core.util.HexUtils;
 
 /**
  * Represents the different kinds of calibration preset (picture mode)
- * for projector models VW315, VW320, VW328, VW365, VW515, VW520, VW528, VW665,
- * HW35ES, HW40ES, HW50ES, HW55ES, HW58ES, HW60, HW65, HW68
+ * for projector models VW40, VW50, VW60, VW70, VW100, HW15, HW20, HW20A
  *
- * @author Markus Wehrle - Initial contribution
- * @author Laurent Garnier - Transform into an enum
+ * @author Laurent Garnier - Initial contribution
  */
-public enum SonyProjectorCalibrationPreset {
+public enum SonyProjectorCalibrationPreset2 {
 
-    CINEMA_FILM1("Film1", new byte[] { 0x00, 0x00 }),
-    CINEMA_FILM2("Film2", new byte[] { 0x00, 0x01 }),
-    REFERENCE("Reference", new byte[] { 0x00, 0x02 }),
-    TV("TV", new byte[] { 0x00, 0x03 }),
-    PHOTO("Photo", new byte[] { 0x00, 0x04 }),
-    GAME("Game", new byte[] { 0x00, 0x05 }),
-    BRT_CINE("BRTCINE", new byte[] { 0x00, 0x06 }),
-    BRT_TV("BRTTV", new byte[] { 0x00, 0x07 }),
-    USER("User", new byte[] { 0x00, 0x08 });
+    DYNAMIC("Dynamic", new byte[] { 0x00, 0x00 }),
+    STANDARD("Standard", new byte[] { 0x00, 0x01 }),
+    CINEMA("Cinema", new byte[] { 0x00, 0x02 }),
+    USER1("User1", new byte[] { 0x00, 0x03 }),
+    USER2("User2", new byte[] { 0x00, 0x04 }),
+    USER3("User3", new byte[] { 0x00, 0x05 });
 
     private String name;
     private byte[] dataCode;
 
-    private SonyProjectorCalibrationPreset(String name, byte[] dataCode) {
+    private SonyProjectorCalibrationPreset2(String name, byte[] dataCode) {
         this.name = name;
         this.dataCode = dataCode;
     }
@@ -48,8 +43,9 @@ public enum SonyProjectorCalibrationPreset {
         return name;
     }
 
-    public static SonyProjectorCalibrationPreset getFromName(String presetName) throws SonyProjectorConnectorException {
-        for (SonyProjectorCalibrationPreset value : SonyProjectorCalibrationPreset.values()) {
+    public static SonyProjectorCalibrationPreset2 getFromName(String presetName)
+            throws SonyProjectorConnectorException {
+        for (SonyProjectorCalibrationPreset2 value : SonyProjectorCalibrationPreset2.values()) {
             if (value.getName().equals(presetName)) {
                 return value;
             }
@@ -57,9 +53,9 @@ public enum SonyProjectorCalibrationPreset {
         throw new SonyProjectorConnectorException("Invalid calibration preset name: " + presetName);
     }
 
-    public static SonyProjectorCalibrationPreset getFromDataCode(byte[] dataCode)
+    public static SonyProjectorCalibrationPreset2 getFromDataCode(byte[] dataCode)
             throws SonyProjectorConnectorException {
-        for (SonyProjectorCalibrationPreset value : SonyProjectorCalibrationPreset.values()) {
+        for (SonyProjectorCalibrationPreset2 value : SonyProjectorCalibrationPreset2.values()) {
             if (Arrays.equals(dataCode, value.getDataCode())) {
                 return value;
             }

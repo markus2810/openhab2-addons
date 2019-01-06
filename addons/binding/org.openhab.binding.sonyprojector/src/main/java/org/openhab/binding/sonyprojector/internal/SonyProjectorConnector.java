@@ -19,61 +19,62 @@ import org.slf4j.LoggerFactory;
  * Class for communicating with Sony Projectors
  *
  * @author Markus Wehrle - Initial contribution
+ * @author Laurent Garnier - Use ENUMs and use byte[] rather than String for binary messages
  */
 public abstract class SonyProjectorConnector {
 
     private final Logger logger = LoggerFactory.getLogger(SonyProjectorConnector.class);
 
+    private static final byte[] POWER_ON = new byte[] { 0x00, 0x01 };
+    private static final byte[] POWER_OFF = new byte[] { 0x00, 0x00 };
+
     public int getLampHours() throws SonyProjectorConnectorException {
-        byte[] bytes = getSetting(SonyProjectorCommand.LampTimer);
+        byte[] bytes = getSetting(SonyProjectorCommand.LAMP_TIMER);
         int val = ((bytes[0] & 0xff) << 8) | (bytes[1] & 0xff);
         return val;
     }
 
     public void setCalibrationPreset(Command cmd) throws SonyProjectorConnectorException {
-        String presetData = new String(SonyProjectorCalibrationPreset.getFromName(cmd.toString()));
-        setSetting(SonyProjectorCommand.CalibrationPreset, presetData);
+        byte[] presetData = SonyProjectorCalibrationPreset.getFromName(cmd.toString()).getDataCode();
+        setSetting(SonyProjectorCommand.CALIBRATION_PRESET, presetData);
     }
 
     public String getCalibrationPreset() throws SonyProjectorConnectorException {
-        byte[] data = getSetting(SonyProjectorCommand.CalibrationPreset);
-        return SonyProjectorCalibrationPreset.getFromByteData(data);
+        return SonyProjectorCalibrationPreset.getFromDataCode(getSetting(SonyProjectorCommand.CALIBRATION_PRESET))
+                .getName();
     }
 
     public void setPower(Command cmd) throws SonyProjectorConnectorException {
         logger.debug("setting sony projector power");
 
-        String data;
         if (cmd == OnOffType.ON) {
-            data = SonyProjectorData.On;
+            setSetting(SonyProjectorCommand.POWER, POWER_ON);
         } else if (cmd == OnOffType.OFF) {
-            data = SonyProjectorData.Off;
+            setSetting(SonyProjectorCommand.POWER, POWER_OFF);
         } else {
             logger.debug("setPower invalid cmd");
             return;
         }
-
-        setSetting(SonyProjectorCommand.Power, data);
     }
 
     public OnOffType getPower() throws SonyProjectorConnectorException {
-        byte[] data = getSetting(SonyProjectorCommand.StatusPower);
+        byte[] data = getSetting(SonyProjectorCommand.STATUS_POWER);
 
-        if (Arrays.equals(data, SonyProjectorStatusPower.StartUp)
-                || Arrays.equals(data, SonyProjectorStatusPower.SartUpLamp)
-                || Arrays.equals(data, SonyProjectorStatusPower.PowerOn)) {
+        if (Arrays.equals(data, SonyProjectorStatusPower.START_UP.getDataCode())
+                || Arrays.equals(data, SonyProjectorStatusPower.STARTUP_LAMP.getDataCode())
+                || Arrays.equals(data, SonyProjectorStatusPower.POWER_ON.getDataCode())) {
             return OnOffType.ON;
         }
         return OnOffType.OFF;
     }
 
     public String getStatusPower() throws SonyProjectorConnectorException {
-        byte[] data = getSetting(SonyProjectorCommand.StatusPower);
-        return SonyProjectorStatusPower.getFromByteData(data);
+        return SonyProjectorStatusPower.getFromDataCode(getSetting(SonyProjectorCommand.STATUS_POWER)).getName();
     }
 
-    protected abstract byte[] getSetting(String cmd) throws SonyProjectorConnectorException;
+    protected abstract byte[] getSetting(SonyProjectorCommand command) throws SonyProjectorConnectorException;
 
-    protected abstract void setSetting(String cmd, String data) throws SonyProjectorConnectorException;
+    protected abstract void setSetting(SonyProjectorCommand command, byte[] data)
+            throws SonyProjectorConnectorException;
 
 }
