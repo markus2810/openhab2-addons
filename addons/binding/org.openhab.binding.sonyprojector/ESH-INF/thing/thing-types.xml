@@ -5,61 +5,70 @@
 	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
 	<!-- Sample Thing Type -->
-	<thing-type id="sonyprojector">
-		<label>Sony Projector Binding Thing</label>
-		<description>Sample thing for SonyProjector Binding</description>
+	<thing-type id="ethernetconnection">
+		<label>Ethernet Connection</label>
+		<description>Ethernet connection to the Sony projector</description>
 
 		<channels>
-            <channel id="power" typeId="power" />
-            <channel id="powerstate" typeId="powerstate" />
-            <channel id="calibrationpreset" typeId="calibrationpreset" />
+			<channel id="power" typeId="power" />
+			<channel id="powerstate" typeId="powerstate" />
+			<channel id="calibrationpreset" typeId="calibrationpreset" />
 		</channels>
 
 		<config-description>
-            <parameter name="host" type="text" required="true">
-                <label>Address</label>
-                <description>Host name or IP address of the projector</description>
-            </parameter>
-            <parameter name="port" type="integer" required="false">
-                <label>Port</label>
-                <description>Communication port. Default is 53484</description>
-            </parameter>
-            <parameter name="community" type="text" required="false">
-                <label>Community</label>
-                <description>Community of the projector. Length must be 4 characters. Default "SONY"</description>
-            </parameter>            
+			<parameter name="host" type="text" required="true">
+				<label>network-address</label>
+				<description>Host name or IP address of the projector</description>
+			</parameter>
+			<parameter name="port" type="integer" required="false">
+				<label>Port</label>
+				<description>Communication port. Default is 53484</description>
+				<default>53484</default>
+			</parameter>
+			<parameter name="community" type="text" required="false">
+				<label>Community</label>
+				<description>Community of the projector. Length must be 4 characters. Default "SONY"</description>
+				<default>SONY</default>
+			</parameter>
 		</config-description>
 
 	</thing-type>
 
-    <channel-type id="power">
-        <item-type>Switch</item-type>
-        <label>Power</label>
-        <description>Power ON/OFF the projector</description>
-    </channel-type>
-    <channel-type id="powerstate">
-        <item-type>String</item-type>
-        <label>Power State</label>
-        <description>Current detailed power state of the projector</description>
-        <state readOnly="true" ></state>
-    </channel-type>
-        <channel-type id="calibrationpreset">
-        <item-type>String</item-type>
-        <label>Calibration Preset</label>
-        <description>Get and set the calibration preset</description>
-        <state>
-            <options>
-                <option value="Film1">Film1</option>
-                <option value="Film2">Film2</option>
-                <option value="REF">REF</option>
-                <option value="TV">TVL</option>
-                <option value="Photo">Photo</option>
-                <option value="Game">Game</option>
-                <option value="BRTCINE">BRTCINE</option>
-                <option value="BRTTV">BRTTV</option>
-                <option value="User">User</option>
-            </options>
-        </state>
-    </channel-type>
+	<channel-type id="power">
+		<item-type>Switch</item-type>
+		<label>Power</label>
+		<description>Power ON/OFF the projector</description>
+	</channel-type>
+	<channel-type id="powerstate">
+		<item-type>String</item-type>
+		<label>Power State</label>
+		<description>Current detailed power state of the projector</description>
+		<state readOnly="true"></state>
+	</channel-type>
+	<channel-type id="calibrationpreset">
+		<item-type>String</item-type>
+		<label>Calibration Preset</label>
+		<description>Get and set the calibration preset</description>
+		<state>
+			<options>
+				<option value="Film1">Cinema Film 1</option>
+				<option value="Film2">Cinema Film 2</option>
+				<option value="Digital">Cinema Digital</option>
+				<option value="Reference">Reference</option>
+				<option value="TV">TVL</option>
+				<option value="Photo">Photo</option>
+				<option value="Game">Game</option>
+				<option value="BRTCINE">BRT Film</option>
+				<option value="BRTTV">BRT TV</option>
+				<option value="Dynamic">Dynamic</option>
+				<option value="Standard">Standard</option>
+				<option value="Cinema">Cinema</option>
+				<option value="User">User</option>
+				<option value="User1">User 1</option>
+				<option value="User2">User 2</option>
+				<option value="User3">User 3</option>
+			</options>
+		</state>
+	</channel-type>
 
 </thing:thing-descriptions>

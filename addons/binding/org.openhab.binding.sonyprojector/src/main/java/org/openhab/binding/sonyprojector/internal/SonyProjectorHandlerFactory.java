@@ -8,7 +8,7 @@
  */
 package org.openhab.binding.sonyprojector.internal;
 
-import static org.openhab.binding.sonyprojector.internal.SonyProjectorBindingConstants.THING_TYPE_SONYPROJECTOR;
+import static org.openhab.binding.sonyprojector.internal.SonyProjectorBindingConstants.THING_TYPE_ETHERNET;
 
 import java.util.Collections;
 import java.util.Set;
@@ -32,7 +32,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(configurationPid = "binding.sonyprojector", service = ThingHandlerFactory.class)
 public class SonyProjectorHandlerFactory extends BaseThingHandlerFactory {
 
-    private static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Collections.singleton(THING_TYPE_SONYPROJECTOR);
+    private static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Collections.singleton(THING_TYPE_ETHERNET);
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
@@ -43,7 +43,7 @@ public class SonyProjectorHandlerFactory extends BaseThingHandlerFactory {
     protected @Nullable ThingHandler createHandler(Thing thing) {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
-        if (THING_TYPE_SONYPROJECTOR.equals(thingTypeUID)) {
+        if (THING_TYPE_ETHERNET.equals(thingTypeUID)) {
             return new SonyProjectorHandler(thing);
         }
 
